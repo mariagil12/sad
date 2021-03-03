@@ -8,7 +8,7 @@ public class editableBufferedReader extends BufferedReader {
 			String[] cmd = {"/bin/sh","-c", "stty -echo raw </dev/tty"};
 			Runtime.getRuntime().exec(cmd);
 		} catch ( IOException e) {
-			e.printStackTrace();;
+			e.printStackTrace();
 		}
 	}
 
@@ -17,7 +17,7 @@ public class editableBufferedReader extends BufferedReader {
 			String[] cmd = {"/bin/sh","-c", "stty -raw echo </dev/tty"};
 			Runtime.getRuntime().exec(cmd);
 		} catch ( IOException e) {
-			e.printStackTrace();;
+			e.printStackTrace();
 		}
 	}
 	
