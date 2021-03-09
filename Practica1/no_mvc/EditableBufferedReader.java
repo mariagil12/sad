@@ -44,6 +44,23 @@ public class EditableBufferedReader extends BufferedReader{
 		super(in);
 	}
 
+	protected void setRaw() {
+		try{
+			String[] cmd = {"/bin/sh","-c", "stty -echo raw </dev/tty"};
+			Runtime.getRuntime().exec(cmd);
+		} catch ( IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	protected void unsetRaw() {
+		try{
+			String[] cmd = {"/bin/sh","-c", "stty -raw echo </dev/tty"};
+			Runtime.getRuntime().exec(cmd);
+		} catch ( IOException e) {
+			e.printStackTrace();
+		}
+	}
 	
 	@Override
 	public int read() throws IOException{
