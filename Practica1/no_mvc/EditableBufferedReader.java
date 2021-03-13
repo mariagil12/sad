@@ -1,3 +1,5 @@
+package no_mvc;
+
 import java.io.*;
 
 public class EditableBufferedReader extends BufferedReader{
@@ -8,10 +10,12 @@ public class EditableBufferedReader extends BufferedReader{
 	public static final int LEFT = 37;
 	public static final int HOME = 36;
 	public static final int END = 35;
-	public static final int INS = 45;
+	public static final int INS = 155;
 	public static final int DEL = 127;
 	public static final int BACKSPACE = 8;
-	public static final int ENTER = 13;
+	public static final int ENTER = 10;
+	
+	private Line linea;
 	
 	/**
 	 * CÓDIGO XTERM
@@ -27,21 +31,22 @@ public class EditableBufferedReader extends BufferedReader{
 	 * 
 	 * 
 	 * CÓDIGO DECIMAL
-	 * https://keycode.info/
+	 * https://stackoverflow.com/questions/15313469/java-keyboard-keycodes-list
 	 * right:		39
 	 * left: 		37
 	 * home:		36
 	 * end: 		35
-	 * insert:		45
+	 * insert:		155
 	 * delete:		127
 	 * backspace: 	8
 	 * ESC: 		27
-	 * 
+	 * ENTER: 		10 
 	 * 
 	 */
 	
 	public EditableBufferedReader(Reader in) {
 		super(in);
+		this.linea=new Line();
 	}
 
 	protected void setRaw() {
@@ -91,7 +96,43 @@ public class EditableBufferedReader extends BufferedReader{
 		return key; 
 	}
  
-
+	@Override
+	public String readLine() throws IOException{
+		int caracter=0;
+		while(caracter!=ENTER) {
+			caracter=this.read(); //No ponemos super porque sinó no usaríamos nuestro método "read()"
+			switch(caracter) { //Primero vemos si es una secuencia de escape
+				case RIGHT:
+					this.linea.right();
+				break;
+				case LEFT:
+					this.linea.left();
+				break;
+				case INS:
+					this.linea.changeInsert();
+				break;
+				case DEL:
+					this.linea.delete();
+				break;
+				case HOME:
+					this.linea.home();
+				break;
+				case END:
+					this.linea.end();
+				break;
+				case BACKSPACE:
+					this.linea.backspace();
+				break;
+				case ESC_I:
+					System.out.println("Invalid input");
+				break;
+				default: //Si no es una secuencia de escape supondremos que es un caracter
+					this.linea.addChar(caracter);
+				break;
+			}
+		}
+		return this.linea.toString();			
+	}
 
 
 
