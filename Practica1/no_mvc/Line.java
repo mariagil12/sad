@@ -103,8 +103,5 @@ import java.util.*;
 			}
 		}
 		
-		public void enter() {
-			
-		}
 	}
 
