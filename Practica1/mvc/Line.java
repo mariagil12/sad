@@ -30,7 +30,6 @@ public class Line extends Observable{
 	
 	ArrayList<Integer> buf;
 	private int pos;
-	private int len;
 	private boolean ins;
 	private String[] action;
 	private StringBuilder str;
