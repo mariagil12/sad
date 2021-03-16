@@ -38,7 +38,6 @@ public class Line extends Observable{
 		this.buf=new ArrayList<>();
 		this.str=new StringBuilder();
 		this.pos=0;
-		this.len=0;
 		this.ins=false;
 		this.action=new String[2];
 	}
