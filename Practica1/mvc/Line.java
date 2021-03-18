@@ -31,7 +31,7 @@ public class Line extends Observable{
 	ArrayList<Integer> buf;
 	private int pos;
 	private boolean ins;
-	private String[] action;
+	private String[] notify;
 	private StringBuilder str;
 	
 	public Line() {
@@ -39,7 +39,7 @@ public class Line extends Observable{
 		this.str=new StringBuilder();
 		this.pos=0;
 		this.ins=false;
-		this.action=new String[2];
+		this.notify=new String[2];
 	}
 	
 	public StringBuilder getLine() {
@@ -63,25 +63,25 @@ public class Line extends Observable{
 	}
 	
 	public void invalidInput() {
-		action[0]="false";
+		notify[0]="false";
 		this.setChanged();
-		this.notifyObservers(action);
+		this.notifyObservers(notify);
 	}
 	
 	public void addCar(char car) {
 		String str=""+car;
 		if(getInsert()) { //Si está en modo insert
 			this.str.replace(this.pos, this.pos+1,str); 
-			action[0]="true";
-			action[1]=str;
+			notify[0]="true";
+			notify[1]=str;
 			this.setChanged();
-			this.notifyObservers(action);
+			this.notifyObservers(notify);
 		}else { //Si no está en modo insert
 			this.str=this.str.insert(this.pos,car);
-			action[0]="true";
-			action[1]=INS+car;
+			notify[0]="true";
+			notify[1]=INS+car;
 			this.setChanged();
-			this.notifyObservers(action);
+			this.notifyObservers(notify);
 		}
 		this.pos++;
 	}
@@ -90,57 +90,58 @@ public class Line extends Observable{
 		if(this.getLength()>0 && this.pos>0) {
 			this.str.deleteCharAt(this.pos-1);
 			this.pos--;
-			action[0]="true";
-			action[1]=BACKSPACE;
+			notify[0]="true";
+			notify[1]=BACKSPACE;
 			this.setChanged();
-			this.notifyObservers(action);
+			this.notifyObservers(notify);
 		}
 	}
 	
 	public void supr() {
 		if(this.pos<this.getLength()) {
 			this.str.deleteCharAt(this.pos);
-			action[0]="true";
-			action[1]=DEL;
+			notify[0]="true";
+			notify[1]=DEL;
 			this.setChanged();
-			this.notifyObservers(action);
+			this.notifyObservers(notify);
 		}
 	}
 	
 	public void home() {
 		this.pos=0;
-		action[0]="true";
-		action[1]=DEL;
+		notify[0]="true";
+		notify[1]=DEL;
 		this.setChanged();
-		this.notifyObservers(action);
+		this.notifyObservers(notify);
 	}
 	
 	public void end() {
 		int dif=this.getLength()-this.pos;
 		this.pos=this.getLength();
-		action[0]="true";
-		action[1]=CSI+dif+"C";
+		notify[0]="true";
+		notify[1]=CSI+dif+"C";
 		this.setChanged();
-		this.notifyObservers(action);
+		this.notifyObservers(notify);
 	}
 	
 	public void right() {
 		if(this.pos<this.getLength()) {
 			this.pos++;
-			action[0]="true";
-			action[1]=RIGHT;
+			notify[0]="true";
+			notify[1]=RIGHT;
 			this.setChanged();
-			this.notifyObservers(action);
+			this.notifyObservers(notify);
 		}
 	}
 	
 	public void left() {
 		if(this.pos>0) {
 			this.pos--;
-			action[0]="true";
-			action[1]=LEFT;
+			notify[0]="true";
+			notify[1]=LEFT;
 			this.setChanged();
-			this.notifyObservers(action);
+			this.notifyObservers(notify);
 		}
 	}
 }
+
