@@ -3,17 +3,14 @@ package no_mvc;
 import java.util.*;
 
 	public class Line{
-		ArrayList<Integer> lineBuffer;
+		ArrayList<Character> lineBuffer;
 		Boolean insert;
-		char lastChar;
-		private int length;
 		private int cursor;
 		
 		public Line() {
 			this.insert = false;
 			this.lineBuffer = new ArrayList<>();
 			this.cursor = 0;
-			this.length = 0;
 		}
 		
 		public int getPos() {
@@ -25,24 +22,18 @@ import java.util.*;
 		}
 		
 		public char getLastChar() {
-			return lastChar;
+			return lineBuffer.get(lineBuffer.size());
 		}
 		
 		public String toString() {
-			String str = "";
-			int aux = 0;
-			for(int i=0; i<lineBuffer.size();i++) {
-				aux = lineBuffer.get(i);
-				str += (char) aux;
-			}
-			return str;
+			return lineBuffer.toString();
 		}
 		
 		public void removeChar(int pos) {
 			lineBuffer.remove(pos);
 		}
 		
-		public void addChar(int a) {
+		public void addChar(char a) {
 			if (insert) {
 				if (cursor < lineBuffer.size()) {
 					lineBuffer.set(cursor, a);
@@ -50,16 +41,15 @@ import java.util.*;
 					lineBuffer.add(cursor, a);
 				}
 			} else {
-				length = lineBuffer.size();
-				if (cursor < length) {
-					for(int i=length; i>cursor; i--) {
+				int len = lineBuffer.size();
+				if (cursor < len) {
+					for(int i=len; i>cursor; i--) {
 						lineBuffer.add(i,lineBuffer.get(i-1));
 						lineBuffer.remove(i-1);
 					}
 				}
 				lineBuffer.add(cursor,a);
 			}
-			lastChar = (char) a;
 			cursor ++;
 		}
 		
@@ -76,9 +66,8 @@ import java.util.*;
 		}
 		
 		public void delete() {
-			if (cursor == length) {
-				lineBuffer.remove(length);
-				length --;
+			if (cursor == lineBuffer.size()) {
+				lineBuffer.remove(lineBuffer.size());
 			}
 		}
 		
@@ -86,8 +75,6 @@ import java.util.*;
 			if ((cursor <= lineBuffer.size()) && (cursor >= 1) && (lineBuffer.size() > 0)) {
 				lineBuffer.remove(cursor-1);
 				left();
-				length --;
-				
 			}
 		}
 		
