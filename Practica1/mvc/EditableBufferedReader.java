@@ -15,6 +15,5 @@ public class EditableBufferedReader extends BufferedReader{
 		this.consola=new Console();
 		this.linea.addObserver(this.consola);
 	}
-	
 }
 
