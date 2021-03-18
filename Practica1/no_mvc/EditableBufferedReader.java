@@ -127,7 +127,7 @@ public class EditableBufferedReader extends BufferedReader{
 					System.out.println("Invalid input");
 				break;
 				default: //Si no es una secuencia de escape supondremos que es un caracter
-					this.linea.addChar(caracter);
+					this.linea.addChar((char) caracter);
 				break;
 			}
 		}
