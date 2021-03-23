@@ -24,7 +24,7 @@ public class RThread extends Thread{
 				String read=buf.readLine();
 				System.out.println(read);
 				if(client.getUser()!=null) {
-					System.out.println("From: "+client.getUser()+"\n");
+					System.out.println("From: ["+client.getUser()+"]\n");
 				}
 			}catch(IOException e) {
 				System.out.println(e.getMessage());
@@ -33,4 +33,6 @@ public class RThread extends Thread{
 		}
 	}
 	
+}
+
 }
