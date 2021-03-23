@@ -22,7 +22,7 @@ public class MySocket {
 	public void execute() {
 		try {
 			Socket soc=new Socket(this.host, this.port);
-			System.out.println("Successfully connected to server");
+			System.out.println("Successfully connected to server"); 
 			new RThread(soc,this).start();
 			new WThread(soc,this).start();
 		} catch(UnknownHostException e) {
@@ -33,7 +33,7 @@ public class MySocket {
 	}
 	
 	public static void main(String[] args) {
-		if(args.length<2) {
+		if(args.length<2) { // Si no hay 2 argumentos...
 			System.out.println("Syntax error. Syntax should be: java MySocket <hostName> <portNumber>");
 			System.exit(0);
 		}
