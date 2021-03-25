@@ -34,5 +34,3 @@ public class RThread extends Thread{
 	}
 	
 }
-
-}
