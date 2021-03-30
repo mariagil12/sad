@@ -1,12 +1,4 @@
-Introducció
-
-En aquesta pràctica es proposa la programació d’una aplicació Xat textual amb servidor centralitzat. El servidor fa un broadcast dels missatges originats per un client a la resta de clients. Cada client s’identifica per un nick que s’envia al servidor quan aquest es connecta.
-
-El servidor manté un diccionari de parells (nick,socket). Aquest diccionari pot ser accedit en mode lectura o escriptura de forma que el servidor haurà de garantir-ne la seva consistència.
-
-Parts de la pràctica
-
-Es demana:
+PRACTICA 2
 
 1. Programar dues classes MySocket i MyServerSocket que siguin funcionalment equivalents a les classes de Java Socket i ServerSocket però que encapsu-li’n excepcions i els corresponents streams de text BufferedReader i PrintWriter. Aquestes classes hauran de disposar de mètodes de lectura/escriptura dels tipus bàsics.
 
