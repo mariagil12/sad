@@ -14,7 +14,7 @@ public class MyServerSocket {
 	
 	public void execute() {
 		try (ServerSocket serverSocket = new ServerSocket(port)){
-			System.out.println("Server listening to port"+port);
+			System.out.println("Server listening to port "+port);
 			while (true) {
 				Socket socket = serverSocket.accept();
 				System.out.println("Client successfully connected");
