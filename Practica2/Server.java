@@ -1,5 +1,3 @@
-package sad_practica2;
-
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -14,7 +12,7 @@ public class Server extends Thread {
 		this.server = server;
 	}
 	
-	// Es notifica quan es conecta i desconecta user
+	// Es notifica per broadcast quan es conecta i desconecta un user
 	public void run() {
 		try {
 			InputStream input = socket.getInputStream();
@@ -36,20 +34,20 @@ public class Server extends Thread {
 			do {
 				clientMessage = reader.readLine();
 				serverMessage = "[" + userName + "]: " + clientMessage;
-				server.broadcast(serverMessage, userName);
+				server.broadcast(serverMessage, userName); 
 			} while (clientMessage != null);
 			
 			server.removeUser(userName, this);
 			socket.close();
 			
-			serverMessage = userName + " has quitted.";
+			serverMessage = userName + " has quitted";
 			server.broadcast(serverMessage, userName);
 		} catch (IOException ex) { ex.printStackTrace(); }
 	}
 	
 	// S'envia llista de qui hi ha conectat quan es conecta un nou user
 	void printUsers() {
-		if (server.hasUser()) {
+		if (server.moreUsers()) {
 			writer.println("Connected users: " + server.getUserNames());
 		} else {
 			writer.println("No users connected");
@@ -57,7 +55,7 @@ public class Server extends Thread {
 	}
 	
 	// Enviar missatge
-	void sendMessage(String message) {
-		writer.println(message);
-	}
+		void sendMessage(String message) {
+			writer.println(message);
+		}
 }
