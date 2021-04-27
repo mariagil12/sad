@@ -1,5 +1,3 @@
-package sad_Snake;
-
 import java.awt.*;
 import java.util.ArrayList;
 import javax.swing.JFrame;
@@ -15,11 +13,12 @@ public class Play extends JFrame implements KeyListener {
 	private int score;
 	private long goal;
 	private int timePassed = 5;
+			
 	
 	// private int maxX = 800;
 	// private int maxY = 600;
 	private int minX = 0;
-	private int minY = 0;
+	private int minY = 31;
 	private int i = 0;
 	
 	public static void main (String[] args) {
@@ -31,7 +30,7 @@ public class Play extends JFrame implements KeyListener {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setSize(windowWidth, windowHeight);
 		this.setResizable(false);
-		this.setLocation(100,100);
+		this.setLocation(350,100);
 		this.setVisible(true);
 		
 		this.createBufferStrategy(2);	// Buscar info
@@ -71,9 +70,6 @@ public class Play extends JFrame implements KeyListener {
 			g.setColor(Color.BLACK);
 			g.drawRect(minX, minY, windowWidth, windowHeight);
 			
-			if (i == 0) {
-				snake.drawInitialSnake(g);
-			}
 			meal.drawFood(g);
 			snake.drawSnake(g);
 			showScore(g);
@@ -85,20 +81,20 @@ public class Play extends JFrame implements KeyListener {
 	}
 	
 	private void checkCollition() {	// no revisat
-		if ((snake.getSnake().get(0).x>meal.getFood().x+5 || snake.getSnake().get(0).x>meal.getFood().x-5) && (snake.getSnake().get(0).y>meal.getFood().y+5 || snake.getSnake().get(0).y>meal.getFood().y-5)) {
+		if ((snake.getSnake().get(0).x >= (meal.getFood().x-9) && snake.getSnake().get(0).x <= (meal.getFood().x+9)) && (snake.getSnake().get(0).y >= (meal.getFood().y-9) && snake.getSnake().get(0).y <= (meal.getFood().y+9))) {
 			meal.newFood();
 			snake.grow();
 			score += 10;
-			System.out.println("1");
+			System.out.println("Comer fruta");
 		}
-		if (snake.getSnake().get(0).x<0 || snake.getSnake().get(0).y<0 || snake.getSnake().get(0).x>800 || snake.getSnake().get(0).y>600) {
+		if (snake.getSnake().get(0).x<7 || snake.getSnake().get(0).y<30 || snake.getSnake().get(0).x>793 || snake.getSnake().get(0).y>585) {
 			initializeObjects();
-			System.out.println("5");
+			System.out.println("Fuera margen");
 		}
 		for (int n=1; n<snake.getSnake().size(); n++) {
 			if(snake.getSnake().get(0).equals(snake.getSnake().get(n)) && snake.getSnake().size()>4) {
 				initializeObjects();
-				System.out.println("7");
+				System.out.println("Comer snake");
 			}
 		}
 	}
