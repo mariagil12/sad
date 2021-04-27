@@ -24,7 +24,7 @@ public class Meal {
 	public void drawFood(Graphics g) {
 		g.create();
 		g.setColor(Color.RED);
-		g.drawOval(food.x, food.y, 10, 10);
+		// g.drawOval(food.x, food.y, 10, 10);
 		g.fillOval(food.x, food.y, 10, 10);
 	}
 	
@@ -32,3 +32,4 @@ public class Meal {
 		return food;
 	}
 }
+
