@@ -1,5 +1,3 @@
-package sad_Snake;
-
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
@@ -18,14 +16,6 @@ public class Snake {
 	
 	public ArrayList<Point> getSnake() {
 		return snake;
-	}
-	
-	public void drawInitialSnake(Graphics g) {
-		g.create(initialX, initialY, 1, 1);
-		for (int i=0; i<snake.size(); i++) {
-			g.setColor(Color.GREEN);
-			g.fillRect(initialX, initialY, 10, 10);
-		}
 	}
 	
 	public void drawSnake(Graphics g) {
@@ -83,7 +73,10 @@ public class Snake {
 	}
 	
 	public void grow() {
-		snake.add(new Point());
-		
+		Point p=new Point(snake.get(snake.size()-1));
+		p.x=10*p.x;
+		p.y=10*p.y;
+		snake.add(p);
+		System.out.println(p);
 	}
 }
