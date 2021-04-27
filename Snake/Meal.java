@@ -1,13 +1,11 @@
-package sad_Snake;
-
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.util.Random;
 
 public class Meal {
-	private int maxX = 800;
-	private int maxY = 600;
+	private int maxX = 790; //para que no se cree en el borde
+	private int maxY = 562; //restamos la longitud de la barra de la frame para que no se cree ahi
 	private Random random;
 	private Point food;
 	
@@ -17,8 +15,8 @@ public class Meal {
 	}
 	
 	public void newFood() {
-		food.x = random.nextInt(maxX);
-		food.y = random.nextInt(maxY);
+		food.x = 5+random.nextInt(maxX);
+		food.y = 33 + random.nextInt(maxY);
 	}
 	
 	public void drawFood(Graphics g) {
@@ -32,4 +30,3 @@ public class Meal {
 		return food;
 	}
 }
-
