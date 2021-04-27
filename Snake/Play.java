@@ -14,12 +14,13 @@ public class Play extends JFrame implements KeyListener {
 	private Meal meal;
 	private int score;
 	private long goal;
-	private int timePassed = 400;
+	private int timePassed = 5;
 	
-	private int maxX = 800;
-	private int maxY = 600;
+	// private int maxX = 800;
+	// private int maxY = 600;
 	private int minX = 0;
 	private int minY = 0;
+	private int i = 0;
 	
 	public static void main (String[] args) {
 		// modificar para las diferentes versiones de juego i hacer tambien menu
@@ -33,7 +34,7 @@ public class Play extends JFrame implements KeyListener {
 		this.setLocation(100,100);
 		this.setVisible(true);
 		
-		this.createBufferStrategy(2);
+		this.createBufferStrategy(2);	// Buscar info
 		this.addKeyListener(this);
 		
 		initializeObjects();
@@ -46,7 +47,7 @@ public class Play extends JFrame implements KeyListener {
 	
 	private void initializeObjects() {
 		snake = new Snake();
-		snake.grow();
+		// snake.grow();			// borrado
 		meal = new Meal();
 		meal.newFood();
 		score = 0;
@@ -54,7 +55,6 @@ public class Play extends JFrame implements KeyListener {
 	
 	private void play() {
 		snake.moveSnake();
-		System.out.println("3");
 		checkCollition();
 		showDraw();
 	}
@@ -64,15 +64,18 @@ public class Play extends JFrame implements KeyListener {
 		Graphics g = null;
 		try {
 			g = bf.getDrawGraphics();
-			g.setColor(Color.BLACK);
+			// g.setColor(Color.BLACK);
 			
 			g.setColor(Color.LIGHT_GRAY);
-			g.fillRect(minX, minY, maxX, maxY);
+			g.fillRect(minX, minY, windowWidth, windowHeight);
 			g.setColor(Color.BLACK);
-			g.drawRect(minX, minY, maxX, maxY);
+			g.drawRect(minX, minY, windowWidth, windowHeight);
 			
+			if (i == 0) {
+				snake.drawInitialSnake(g);
+			}
 			meal.drawFood(g);
-			snake.drawInitialSnake(g);
+			snake.drawSnake(g);
 			showScore(g);
 		} finally {
 			g.dispose();
@@ -81,26 +84,19 @@ public class Play extends JFrame implements KeyListener {
 		Toolkit.getDefaultToolkit().sync();
 	}
 	
-	private void checkCollition() {
-		System.out.println("4");
-		System.out.println(snake.getSnake().get(0).x);
-		System.out.println(snake.getSnake().get(0).y);
-		// cambien sense moure la snake (???)
-		if (snake.getSnake().get(0).equals(meal.getFood())) {
+	private void checkCollition() {	// no revisat
+		if ((snake.getSnake().get(0).x>meal.getFood().x+5 || snake.getSnake().get(0).x>meal.getFood().x-5) && (snake.getSnake().get(0).y>meal.getFood().y+5 || snake.getSnake().get(0).y>meal.getFood().y-5)) {
 			meal.newFood();
 			snake.grow();
 			score += 10;
 			System.out.println("1");
 		}
-		if (snake.getSnake().get(0).x<1 || snake.getSnake().get(0).y<1) {
-			// || snake.getSnake().get(0).x>699 || snake.getSnake().get(0).y<1 || snake.getSnake().get(0).y >599
+		if (snake.getSnake().get(0).x<0 || snake.getSnake().get(0).y<0 || snake.getSnake().get(0).x>800 || snake.getSnake().get(0).y>600) {
 			initializeObjects();
 			System.out.println("5");
-			//sempre entra aqui, nose whu?????
 		}
 		for (int n=1; n<snake.getSnake().size(); n++) {
-			System.out.println("6");
-			if(snake.getSnake().get(0).equals(snake.getSnake().get(n)) && snake.getSnake().size()>2) {
+			if(snake.getSnake().get(0).equals(snake.getSnake().get(n)) && snake.getSnake().size()>4) {
 				initializeObjects();
 				System.out.println("7");
 			}
@@ -123,6 +119,7 @@ public class Play extends JFrame implements KeyListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		int key = e.getKeyCode();
+		i=1;
 		switch(key) {
 			case KeyEvent.VK_UP:
 				snake.direction("UP");
