@@ -12,15 +12,14 @@ public class Play extends JFrame implements KeyListener {
 	private Meal meal;
 	private int score;
 	private long goal;
-	private int timePassed = 5;
+	private int timePassed = 50;
 			
 	
 	// private int maxX = 800;
 	// private int maxY = 600;
 	private int minX = 0;
 	private int minY = 31;
-	private int i = 0;
-	
+		
 	public static void main (String[] args) {
 		// modificar para las diferentes versiones de juego i hacer tambien menu
 		new Play();
@@ -82,8 +81,8 @@ public class Play extends JFrame implements KeyListener {
 	
 	private void checkCollition() {	// no revisat
 		if ((snake.getSnake().get(0).x >= (meal.getFood().x-9) && snake.getSnake().get(0).x <= (meal.getFood().x+9)) && (snake.getSnake().get(0).y >= (meal.getFood().y-9) && snake.getSnake().get(0).y <= (meal.getFood().y+9))) {
-			meal.newFood();
 			snake.grow();
+			meal.newFood();
 			score += 10;
 			System.out.println("Comer fruta");
 		}
@@ -115,7 +114,6 @@ public class Play extends JFrame implements KeyListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		int key = e.getKeyCode();
-		i=1;
 		switch(key) {
 			case KeyEvent.VK_UP:
 				snake.direction("UP");
