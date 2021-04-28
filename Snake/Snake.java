@@ -9,6 +9,7 @@ public class Snake {
 	private int initialY = 300;
 	private int newX;
 	private int newY;
+	private Point lastPos;
 	
 	public Snake() {
 		this.snake.add(new Point(initialX,initialY));
@@ -24,17 +25,18 @@ public class Snake {
 			/*g.create(initialX, initialY, 1, 1);
 			g.setColor(Color.GREEN);
 			g.fillRect(initialX, initialY, 10, 10);*/
-            // g.setColor(Color.GREEN);
-            //Point p = snake.get(n);
-            //System.out.println(p);
-            //System.out.println(p.x);
-            //System.out.println(p.y);
-            //g.fillRect(p.x, p.y, 10, 10);		// Hemos quitado el p.x*10 a p.x
+            	 	//g.setColor(Color.GREEN);
+           	 	//Point p = snake.get(n);
+           		 //System.out.println(p);
+           		 //System.out.println(p.x);
+           	 	//System.out.println(p.y);
+           	 	//g.fillRect(p.x, p.y, 10, 10);		// Hemos quitado el p.x*10 a p.x
 			g.fillRect(snake.get(n).x, snake.get(n).y, 10, 10);
         }
 	}
 	
 	public void moveSnake() {
+		lastPos=snake.get(snake.size()-1);
 		for(int n=snake.size()-1; n>0; n--) {
 			snake.get(n).setLocation(snake.get(n-1));
 		}
@@ -54,29 +56,26 @@ public class Snake {
 		case "UP":
 			newX = 0;
 			//initialX=0;
-			newY=(-1);
+			newY=(-10);
 			//snake.get(0).y += 1;
 			break;
 		case "DOWN":
 			newX=0;
-			newY=1;
+			newY=10;
 			break;
 		case "RIGTH":
-			newX=1;
+			newX=10;
 			newY=0;
 			break;
 		case "LEFT":
-			newX=(-1);
+			newX=(-10);
 			newY=0;
 			break;
 		}
 	}
 	
 	public void grow() {
-		Point p=new Point(snake.get(snake.size()-1));
-		p.x=10*p.x;
-		p.y=10*p.y;
-		snake.add(p);
-		System.out.println(p);
+		snake.add(new Point(lastPos.x,lastPos.y));
+		
 	}
 }
