@@ -1,108 +1,173 @@
 package sad_Snake;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Point;
+import java.awt.*;
 import java.util.ArrayList;
+import javax.swing.JFrame;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.image.BufferStrategy;
 
-public class Snake {
-	private ArrayList<Point> snake = new ArrayList<Point>();
-	private int initialX = 400;
-	private int initialY = 300;
-	private int newX;
-	private int newY;
-	private int oldX;
-	private int oldY;
-	private Point lastPos;
-	private Point aux = new Point();
-	public boolean pause = false;
+public class Play extends JFrame implements KeyListener {
+	private int windowWidth = 800;
+	private int windowHeight = 600;
+	private Snake snake;
+	private Meal meal;
+	private int score;
+	private long goal;
+	private int timePassed;
+	private int i;
+	private boolean presed;
+	private boolean menu=true;
+			
 	
-	public Snake() {
-		this.snake.add(new Point(initialX,initialY));
+	// private int maxX = 800;
+	// private int maxY = 600;
+	private int minX = 0;
+	private int minY = 28;
+		
+	public static void main (String[] args) {
+		new Play();
 	}
 	
-	public ArrayList<Point> getSnake() {
-		return snake;
-	}
-	
-	public void drawSnake(Graphics g) {
-		g.setColor(Color.GREEN);
-		for(int n = 0; n < snake.size(); n++) {
-			/*g.create(initialX, initialY, 1, 1);
-			g.setColor(Color.GREEN);
-			g.fillRect(initialX, initialY, 10, 10);*/
-            	 	//g.setColor(Color.GREEN);
-           	 	//Point p = snake.get(n);
-           		 //System.out.println(p);
-           		 //System.out.println(p.x);
-           	 	//System.out.println(p.y);
-           	 	//g.fillRect(p.x, p.y, 10, 10);		// Hemos quitado el p.x*10 a p.x
-			g.fillRect(snake.get(n).x, snake.get(n).y, 10, 10);
-        }
-	}
-	
-	public boolean allowMove() {
-		aux.x = snake.get(0).x + newX;
-		aux.y = snake.get(0).y + newY;
-		if(snake.size()>1 && snake.get(1).equals(aux)) {
-			return false;
-		}
-		else {
-			return true;
+	public Play() {
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setSize(windowWidth, windowHeight);
+		this.setResizable(false);
+		this.setLocation(350,100);
+		this.setVisible(true);
+		
+		this.createBufferStrategy(2);	// Buscar info
+		this.addKeyListener(this);
+		
+		initializeObjects();
+		
+		while(true) {
+			play();
+			sleep();
 		}
 	}
 	
-	public void moveSnake() {
-		if(pause == false) {
-			lastPos=snake.get(snake.size()-1);
-			if(allowMove()) {
-				for(int n=snake.size()-1; n>0; n--) {
-					snake.get(n).setLocation(snake.get(n-1));
-				}
-				snake.get(0).setLocation(aux);
+	private void initializeObjects() {
+		snake = new Snake();
+		// snake.grow();			// borrado
+		meal = new Meal();
+		meal.newFood();
+		score = 0;
+	}
+	
+	private void play() {
+		snake.moveSnake();
+		checkCollition();
+		showDraw();
+	}
+	
+	private void showDraw() {
+		BufferStrategy bf = this.getBufferStrategy();
+		Graphics g = null;
+		try {
+			g = bf.getDrawGraphics();
+			// g.setColor(Color.BLACK);
+			
+			g.setColor(Color.LIGHT_GRAY);
+			g.fillRect(minX, minY, windowWidth, windowHeight);
+			g.setColor(Color.BLACK);
+			g.drawRect(minX, minY, windowWidth, windowHeight);
+			
+			meal.drawFood(g);
+			snake.drawSnake(g);
+			showScore(g);
+		} finally {
+			g.dispose();
+		}
+		bf.show();
+		Toolkit.getDefaultToolkit().sync();
+	}
+	
+	private void checkCollition() {	// no revisat
+		if ((snake.getSnake().get(0).x >= (meal.getFood().x-9) && snake.getSnake().get(0).x <= (meal.getFood().x+9)) && (snake.getSnake().get(0).y >= (meal.getFood().y-9) && snake.getSnake().get(0).y <= (meal.getFood().y+9))) {
+			snake.grow();
+			meal.newFood();
+			score += 10;
+			System.out.println("Comer fruta");
+		}
+		if (snake.getSnake().get(0).x<7 || snake.getSnake().get(0).y<26 || snake.getSnake().get(0).x>795 || snake.getSnake().get(0).y>591) {
+			initializeObjects();
+			System.out.println("Fuera margen");
+		}
+		for (int n=1; n<snake.getSnake().size(); n++) {
+			if(snake.getSnake().get(0).equals(snake.getSnake().get(n)) && snake.getSnake().size()>4) {
+				initializeObjects();
+				System.out.println("Comer snake");
 			}
-			else {
-				for(int n=snake.size()-1; n>0; n--) {
-					snake.get(n).setLocation(snake.get(n-1));
-				}
-				Point newPoint = new Point();
-				newPoint.x=snake.get(0).x+oldX;
-				newPoint.y=snake.get(0).y+oldY;
-				snake.get(0).setLocation(newPoint);
-			}
+		}
+	}
+	
+	private void showScore(Graphics g) {
+		g.setColor(Color.WHITE);
+		g.setFont(new Font("Arial", Font.BOLD, 16));
+		g.drawString("Score: " + score, 20, 50);
+	}
+	
+	private void sleep() {
+		if (score <= 50) {
+			timePassed=60;
+		} else if (score <= 100) {
+			timePassed=50;
+		} else if (score <= 150) {
+			timePassed=40;
+		} else if (score <= 200) {
+			timePassed=30;
+		} else if (score <= 250) {
+			timePassed=20;
+		} else if (score <= 300) {
+			timePassed=10;
 		} else {
-			return;
+			timePassed=5;
+		}
+		goal = (System.currentTimeMillis()+timePassed);
+		while(System.currentTimeMillis()<goal) {
+			
 		}
 	}
 	
-	public void direction(String d) {
-		oldX=newX;
-		oldY=newY;
-		switch(d) {
-		// aqui entra a tots els casos
-		case "UP":
-			newX = 0;
-			//initialX=0;
-			newY=(-10);
-			//snake.get(0).y += 1;
-			break;
-		case "DOWN":
-			newX=0;
-			newY=10;
-			break;
-		case "RIGTH":
-			newX=10;
-			newY=0;
-			break;
-		case "LEFT":
-			newX=(-10);
-			newY=0;
-			break;
+	@Override
+	public void keyPressed(KeyEvent e) {
+		int key = e.getKeyCode();
+		switch(key) {
+			case KeyEvent.VK_UP:
+				snake.direction("UP");
+				if (menu==true) {
+					i --;
+				}
+				break;
+			case KeyEvent.VK_DOWN:
+				snake.direction("DOWN");
+				if (menu==true) {
+					i ++;
+				}
+				break;
+			case KeyEvent.VK_RIGHT:
+				snake.direction("RIGTH");
+				break;
+			case KeyEvent.VK_LEFT:
+				snake.direction("LEFT");
+				break;
+			case KeyEvent.VK_E:
+				System.exit(0);
+				break;
+			case KeyEvent.VK_SPACE:
+				snake.pause = !snake.pause;
+				break;
 		}
 	}
+		
+	@Override
+	public void keyReleased(KeyEvent e) {
+		
+	}
 	
-	public void grow() {
-		snake.add(new Point(lastPos.x,lastPos.y));
+	@Override 
+	public void keyTyped(KeyEvent e) {
 		
 	}
 }
