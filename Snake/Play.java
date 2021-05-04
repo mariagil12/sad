@@ -1,3 +1,5 @@
+package sad_Snake;
+
 import java.awt.*;
 import java.util.ArrayList;
 import javax.swing.JFrame;
@@ -13,16 +15,18 @@ public class Play extends JFrame implements KeyListener {
 	private int score;
 	private long goal;
 	private int timePassed;
+	private int i;
+	private boolean presed;
+	private boolean menu=true;
 			
 	
 	// private int maxX = 800;
 	// private int maxY = 600;
 	private int minX = 0;
-	private int minY = 31;
+	private int minY = 28;
 		
 	public static void main (String[] args) {
-		// modificar para las diferentes versiones de juego i hacer tambien menu
-		new Play();
+		new Play(); // Estoy haciendo el menu
 	}
 	
 	public Play() {
@@ -86,7 +90,7 @@ public class Play extends JFrame implements KeyListener {
 			score += 10;
 			System.out.println("Comer fruta");
 		}
-		if (snake.getSnake().get(0).x<7 || snake.getSnake().get(0).y<30 || snake.getSnake().get(0).x>793 || snake.getSnake().get(0).y>585) {
+		if (snake.getSnake().get(0).x<7 || snake.getSnake().get(0).y<26 || snake.getSnake().get(0).x>795 || snake.getSnake().get(0).y>591) {
 			initializeObjects();
 			System.out.println("Fuera margen");
 		}
@@ -120,7 +124,6 @@ public class Play extends JFrame implements KeyListener {
 		} else {
 			timePassed=5;
 		}
-		
 		goal = (System.currentTimeMillis()+timePassed);
 		while(System.currentTimeMillis()<goal) {
 			
@@ -133,9 +136,15 @@ public class Play extends JFrame implements KeyListener {
 		switch(key) {
 			case KeyEvent.VK_UP:
 				snake.direction("UP");
+				if (menu==true) {
+					i --;
+				}
 				break;
 			case KeyEvent.VK_DOWN:
 				snake.direction("DOWN");
+				if (menu==true) {
+					i ++;
+				}
 				break;
 			case KeyEvent.VK_RIGHT:
 				snake.direction("RIGTH");
@@ -145,6 +154,10 @@ public class Play extends JFrame implements KeyListener {
 				break;
 			case KeyEvent.VK_E:
 				System.exit(0);
+				break;
+			case KeyEvent.VK_SPACE:
+				snake.pause = !snake.pause;
+				break;
 		}
 	}
 		
