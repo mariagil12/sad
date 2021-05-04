@@ -12,7 +12,7 @@ public class Play extends JFrame implements KeyListener {
 	private Meal meal;
 	private int score;
 	private long goal;
-	private int timePassed = 50;
+	private int timePassed;
 			
 	
 	// private int maxX = 800;
@@ -105,6 +105,21 @@ public class Play extends JFrame implements KeyListener {
 	}
 	
 	private void sleep() {
+		if (score <= 50) {
+			timePassed=60;
+		} else if (score <= 100) {
+			timePassed=50;
+		} else if (score <= 150) {
+			timePassed=40;
+		} else if (score <= 200) {
+			timePassed=30;
+		} else if (score <= 250) {
+			timePassed=20;
+		} else if (score <= 300) {
+			timePassed=10;
+		} else {
+			timePassed=5;
+		}
 		goal = (System.currentTimeMillis()+timePassed);
 		while(System.currentTimeMillis()<goal) {
 			
