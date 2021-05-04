@@ -9,7 +9,10 @@ public class Snake {
 	private int initialY = 300;
 	private int newX;
 	private int newY;
+	private int oldX;
+	private int oldY;
 	private Point lastPos;
+	private Point aux = new Point();
 	
 	public Snake() {
 		this.snake.add(new Point(initialX,initialY));
@@ -35,29 +38,45 @@ public class Snake {
         }
 	}
 	
+	public boolean allowMove() {
+		aux.x = snake.get(0).x + newX;
+		aux.y = snake.get(0).y + newY;
+		if(snake.size()>1 && snake.get(1).equals(aux)) {
+			return false;
+		}
+		else {
+			return true;
+		}
+	}
+	
 	public void moveSnake() {
 		lastPos=snake.get(snake.size()-1);
-		for(int n=snake.size()-1; n>0; n--) {
-			snake.get(n).setLocation(snake.get(n-1));
+		if(allowMove()) {
+			for(int n=snake.size()-1; n>0; n--) {
+				snake.get(n).setLocation(snake.get(n-1));
+			}
+			snake.get(0).setLocation(aux);
 		}
-		Point newPoint = new Point();
-		newPoint.x = snake.get(0).x + newX;
-		newPoint.y = snake.get(0).y + newY;
-		snake.get(0).setLocation(newPoint);
-		// fins aqui be
+		else {
+			for(int n=snake.size()-1; n>0; n--) {
+				snake.get(n).setLocation(snake.get(n-1));
+			}
+			Point newPoint = new Point();
+			newPoint.x=snake.get(0).x+oldX;
+			newPoint.y=snake.get(0).y+oldY;
+			snake.get(0).setLocation(newPoint);
+		}
+		
 	}
 	
 	public void direction(String d) {
-		/*for(int n=snake.size()-1; n>0; n--) {
-			snake.get(n).setLocation(snake.get(n-1));
-		}ç*/
+		oldX=newX;
+		oldY=newY;
 		switch(d) {
 		// aqui entra a tots els casos
 		case "UP":
 			newX = 0;
-			//initialX=0;
 			newY=(-10);
-			//snake.get(0).y += 1;
 			break;
 		case "DOWN":
 			newX=0;
