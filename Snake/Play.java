@@ -1,5 +1,3 @@
-package sad_Snake;
-
 import java.awt.*;
 import java.util.ArrayList;
 import javax.swing.JFrame;
@@ -15,15 +13,10 @@ public class Play extends JFrame implements KeyListener {
 	private int score;
 	private long goal;
 	private int timePassed;
-	private int i;
-	private boolean presed;
-	private boolean menu=true;
 			
 	
-	// private int maxX = 800;
-	// private int maxY = 600;
 	private int minX = 0;
-	private int minY = 28;
+	private int minY = 31;
 		
 	public static void main (String[] args) {
 		new Play();
@@ -36,7 +29,7 @@ public class Play extends JFrame implements KeyListener {
 		this.setLocation(350,100);
 		this.setVisible(true);
 		
-		this.createBufferStrategy(2);	// Buscar info
+		this.createBufferStrategy(2);
 		this.addKeyListener(this);
 		
 		initializeObjects();
@@ -49,7 +42,6 @@ public class Play extends JFrame implements KeyListener {
 	
 	private void initializeObjects() {
 		snake = new Snake();
-		// snake.grow();			// borrado
 		meal = new Meal();
 		meal.newFood();
 		score = 0;
@@ -66,8 +58,6 @@ public class Play extends JFrame implements KeyListener {
 		Graphics g = null;
 		try {
 			g = bf.getDrawGraphics();
-			// g.setColor(Color.BLACK);
-			
 			g.setColor(Color.LIGHT_GRAY);
 			g.fillRect(minX, minY, windowWidth, windowHeight);
 			g.setColor(Color.BLACK);
@@ -83,21 +73,18 @@ public class Play extends JFrame implements KeyListener {
 		Toolkit.getDefaultToolkit().sync();
 	}
 	
-	private void checkCollition() {	// no revisat
+	private void checkCollition() {	
 		if ((snake.getSnake().get(0).x >= (meal.getFood().x-9) && snake.getSnake().get(0).x <= (meal.getFood().x+9)) && (snake.getSnake().get(0).y >= (meal.getFood().y-9) && snake.getSnake().get(0).y <= (meal.getFood().y+9))) {
 			snake.grow();
 			meal.newFood();
 			score += 10;
-			System.out.println("Comer fruta");
 		}
-		if (snake.getSnake().get(0).x<7 || snake.getSnake().get(0).y<26 || snake.getSnake().get(0).x>795 || snake.getSnake().get(0).y>591) {
+		if (snake.getSnake().get(0).x<7 || snake.getSnake().get(0).y<30 || snake.getSnake().get(0).x>780 || snake.getSnake().get(0).y>586) {
 			initializeObjects();
-			System.out.println("Fuera margen");
 		}
 		for (int n=1; n<snake.getSnake().size(); n++) {
 			if(snake.getSnake().get(0).equals(snake.getSnake().get(n)) && snake.getSnake().size()>4) {
 				initializeObjects();
-				System.out.println("Comer snake");
 			}
 		}
 	}
@@ -124,6 +111,7 @@ public class Play extends JFrame implements KeyListener {
 		} else {
 			timePassed=5;
 		}
+		
 		goal = (System.currentTimeMillis()+timePassed);
 		while(System.currentTimeMillis()<goal) {
 			
@@ -136,15 +124,9 @@ public class Play extends JFrame implements KeyListener {
 		switch(key) {
 			case KeyEvent.VK_UP:
 				snake.direction("UP");
-				if (menu==true) {
-					i --;
-				}
 				break;
 			case KeyEvent.VK_DOWN:
 				snake.direction("DOWN");
-				if (menu==true) {
-					i ++;
-				}
 				break;
 			case KeyEvent.VK_RIGHT:
 				snake.direction("RIGTH");
@@ -154,7 +136,6 @@ public class Play extends JFrame implements KeyListener {
 				break;
 			case KeyEvent.VK_E:
 				System.exit(0);
-				break;
 			case KeyEvent.VK_SPACE:
 				snake.pause = !snake.pause;
 				break;
