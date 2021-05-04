@@ -14,6 +14,9 @@ public class Snake {
 	private Point lastPos;
 	private Point aux = new Point();
 	public boolean pause = false;
+	public int color=4;
+	// 0 black, 1 gris, 2 rosa, 3 blau, 4 verd, 5 vermell, 6 cyan, 7 magenta, 8 blanc, 9 gris fosc, 10 tronja, 11 groc
+	
 	
 	public Snake() {
 		this.snake.add(new Point(initialX,initialY));
@@ -23,7 +26,45 @@ public class Snake {
 		return snake;
 	}
 	
-	public void drawSnake(Graphics g) {
+	public void drawSnake(Graphics g, int color) {
+		switch(color) {
+		case 0:
+			g.setColor(Color.BLACK);
+			break;
+		case 1:
+			g.setColor(Color.GRAY);
+			break;
+		case 2:
+			g.setColor(Color.PINK);
+			break;
+		case 3:
+			g.setColor(Color.BLUE);
+			break;
+		case 4:
+			g.setColor(Color.GREEN);
+			break;
+		case 5:
+			g.setColor(Color.RED);
+			break;
+		case 6:
+			g.setColor(Color.CYAN);
+			break;
+		case 7:
+			g.setColor(Color.MAGENTA);
+			break;
+		case 8:
+			g.setColor(Color.WHITE);
+			break;
+		case 9:
+			g.setColor(Color.DARK_GRAY);
+			break;
+		case 10:
+			g.setColor(Color.ORANGE);
+			break;
+		case 11:
+			g.setColor(Color.YELLOW);
+			break;
+		}
 		g.setColor(Color.GREEN);
 		for(int n = 0; n < snake.size(); n++) {
 			g.fillRect(snake.get(n).x, snake.get(n).y, 10, 10);
