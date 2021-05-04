@@ -42,7 +42,7 @@ public class Snake {
 	}
 	
 	public void moveSnake() {
-		if (pause==false) {
+		if (!pause) {
 			lastPos=snake.get(snake.size()-1);
 			if(allowMove()) {
 				for(int n=snake.size()-1; n>0; n--) {
