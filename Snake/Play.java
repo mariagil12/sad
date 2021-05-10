@@ -1,4 +1,7 @@
+package sad_Snake;
+
 import java.awt.*;
+import java.awt.color.ColorSpace;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 import java.awt.event.KeyEvent;
@@ -16,15 +19,21 @@ public class Play extends JFrame implements KeyListener {
 	private int i=0;
 	private int j=0;
 	private int k=0;
+	private int t=0;
 	private boolean presed=false;
+	private boolean presed2=false;
 	private boolean menu=true;
 	private boolean colors=false;
 	private boolean play=false;
 	private int time = 10;
+	private boolean first=true;
+	private boolean lose=true;
 			
 	
+	// private int maxX = 800;
+	// private int maxY = 600;
 	private int minX = 0;
-	private int minY = 31;
+	private int minY = 28;
 		
 	public static void main (String[] args) {
 		new Play();
@@ -37,35 +46,43 @@ public class Play extends JFrame implements KeyListener {
 		this.setLocation(350,100);
 		this.setVisible(true);
 		
-		this.createBufferStrategy(2);
+		this.createBufferStrategy(2);	// Buscar info
 		this.addKeyListener(this);
 		
-		initializeObjects();
-		
 		while(true) {
+			if (first) {
+				initializeObjects();
+				first=!first;
+			}
+			
 			while(menu==true) {
 				showMenu(i);
 				sleepMenu();
 				if (presed==true) {
 					menu=false;
 				}
+				presed=false;
 			}
 			switch(i) {
 			case 0:
+				System.out.println(snake.color);
+				System.out.println('B');
 				play=true;
 				playSnake();
 				play=false;
 				break;
 			case 1:
-				// no funciona perque al apretarr enter colors no es cambia a false
-				initializeObjects();
 				colors=true;
 				while(colors=true) {
-					System.out.println(colors);
+				//while(i==1) {
+					if(presed2) {
+						colors=false;
+						break;
+					}
 					showColors(j,k);
 					sleepMenu();
 				}
-				System.out.println(colors);
+				colors=false;
 				showMenu(i);
 				break;
 			case 2:
@@ -77,16 +94,16 @@ public class Play extends JFrame implements KeyListener {
 	}
 	
 	private void playSnake() {
-		initializeObjects();
+		//initializeObjects();
 		
 		while(true) {
 			play();
 			sleep();
 		}
 	}
-	
 	private void initializeObjects() {
 		snake = new Snake();
+		// snake.grow();			// borrado
 		meal = new Meal();
 		meal.newFood();
 		score = 0;
@@ -97,6 +114,7 @@ public class Play extends JFrame implements KeyListener {
 		checkCollition();
 		showDraw();
 	}
+	
 	private void showColors(int j, int k) {
 		BufferStrategy bf = this.getBufferStrategy();
 		Graphics g = null;
@@ -241,14 +259,56 @@ public class Play extends JFrame implements KeyListener {
 		Graphics g = null;
 		try {
 			g = bf.getDrawGraphics();
+			// g.setColor(Color.BLACK);
+			
 			g.setColor(Color.LIGHT_GRAY);
 			g.fillRect(minX, minY, windowWidth, windowHeight);
 			g.setColor(Color.BLACK);
 			g.drawRect(minX, minY, windowWidth, windowHeight);
 			
 			meal.drawFood(g);
-			snake.drawSnake(g);
+			snake.drawSnake(g,snake.color);
 			showScore(g);
+		} finally {
+			g.dispose();
+		}
+		bf.show();
+		Toolkit.getDefaultToolkit().sync();
+	}
+	
+	private void showLose() {
+		BufferStrategy bf = this.getBufferStrategy();
+		Graphics g = null;
+		try {
+			g = bf.getDrawGraphics();
+			
+			g.setColor(Color.LIGHT_GRAY);
+			g.fillRect(minX, minY, windowWidth, windowHeight);
+			g.setColor(Color.BLACK);
+			g.drawRect(minX, minY, windowWidth, windowHeight);
+			
+			g.setColor(Color.BLACK);
+			g.setFont(new Font("Arial", Font.BOLD, 36));
+			g.drawString("Score: " + score, 100, 150);
+			g.setColor(Color.RED);
+			g.setFont(new Font("Arial", Font.BOLD, 56));
+			g.drawString("YOU LOSE :(", 100, 250);
+			g.setColor(Color.BLACK);
+			g.setFont(new Font("Arial", Font.BOLD, 16));
+			g.drawString("Play again", 100, 350);
+			g.setColor(Color.BLACK);
+			g.setFont(new Font("Arial", Font.BOLD, 16));
+			g.drawString("Back to menu", 100, 450);
+			switch(t) {
+			case 0:
+				g.setColor(Color.RED);
+				g.fillOval(85, 340, 10, 10);
+				break;
+			case 1: 
+				g.setColor(Color.RED);
+				g.fillOval(85, 440, 10, 10);
+				break;
+			}
 		} finally {
 			g.dispose();
 		}
@@ -262,12 +322,22 @@ public class Play extends JFrame implements KeyListener {
 			meal.newFood();
 			score += 10;
 		}
-		if (snake.getSnake().get(0).x<7 || snake.getSnake().get(0).y<30 || snake.getSnake().get(0).x>780 || snake.getSnake().get(0).y>586) {
-			initializeObjects();
+		if (snake.getSnake().get(0).x<7 || snake.getSnake().get(0).y<26 || snake.getSnake().get(0).x>795 || snake.getSnake().get(0).y>591) {
+			//initializeObjects();
+			lose=true;
+			while(lose) {
+				showLose();
+				sleepMenu();
+			}
 		}
 		for (int n=1; n<snake.getSnake().size(); n++) {
 			if(snake.getSnake().get(0).equals(snake.getSnake().get(n)) && snake.getSnake().size()>4) {
-				initializeObjects();
+				//initializeObjects();
+				lose=true;
+				while(lose) {
+					showLose();
+					sleepMenu();
+				}
 			}
 		}
 	}
@@ -294,9 +364,15 @@ public class Play extends JFrame implements KeyListener {
 		} else {
 			timePassed=5;
 		}
-		
 		goal = (System.currentTimeMillis()+timePassed);
 		while(System.currentTimeMillis()<goal) {
+			
+		}
+	}
+	
+	private void sleepMenu() {
+		goal = (System.currentTimeMillis()+time);
+		while (System.currentTimeMillis()<goal) {
 			
 		}
 	}
@@ -304,130 +380,146 @@ public class Play extends JFrame implements KeyListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		int key = e.getKeyCode();
-		case KeyEvent.VK_UP:
-			if (menu==true) {
-				i=i+2;
-				i=i%3;
-				System.out.println(i);
-			} else if(play==true){
-				snake.direction("UP");
-			} else if(colors==true) {
-				k=k+2;
-				k=k%3;
-			}
-			break;
-		case KeyEvent.VK_DOWN:
-			//snake.direction("DOWN");
-			if (menu==true) {
-				i ++;
-				i=i%3;
-				System.out.println(i);
-			} else if(colors==true) {
-				k++;
-				k=k%3;
-			} else if (play==true){
-				snake.direction("DOWN");
-			}
-			break;
-		case KeyEvent.VK_RIGHT:
-			if(colors==true) {
-				j++;
-				j=j%4;
-			} else if(play==true) {
-				snake.direction("RIGTH");
-			}
-			break;
-		case KeyEvent.VK_LEFT:
-			if(colors==true) {
-				j=j+3;
-				j=j%4;
-			} else if(play==true) {
-				snake.direction("LEFT");
-			}
-			break;
-		case KeyEvent.VK_E:
-			System.exit(0);
-			break;
-		case KeyEvent.VK_SPACE:
-			snake.pause = !snake.pause;
-			break;
-		case KeyEvent.VK_ENTER:
-			System.out.println(colors);
-			System.out.println('A');
-			if (colors==true) {
-				System.out.println(colors);
-				System.out.println('B');
-				colors=!colors;
-				System.out.println(colors);
-				switch(j) {
-				case 0:
-					switch(k) {
-					case 0:
-						snake.color=0; // black
-						break;
-					case 1:
-						snake.color=1; //gris
-						break;
-					case 2:
-						snake.color=2; // rosa
-						break;
-					}
-					break;
-				case 1:
-					switch(k) {
-					case 0:
-						snake.color=3;
-						//blau
-						break;
-					case 1:
-						snake.color=4;
-						//verd
-						break;
-					case 2:
-						snake.color=5;
-						//vermell
-						break;
-					}
-					break;
-				case 2:
-					switch(k) {
-					case 0:
-						snake.color=6;
-						//cyan
-						break;
-					case 1:
-						snake.color=7;
-						//magenta
-						break;
-					case 2:
-						snake.color=8;
-						//blanc
-						break;
-					}
-					break;
-				case 3:
-					switch(k) {
-					case 0:
-						snake.color=9;
-						//grisfosc
-						break;
-					case 1:
-						snake.color=10;
-						//tronja
-						break;
-					case 2:
-						snake.color=11;
-						//groc
-						break;
-					}
-					break;
+		switch(key) {
+			case KeyEvent.VK_UP:
+				if (menu==true) {
+					i=i+2;
+					i=i%3;
+				} else if(play==true){
+					snake.direction("UP");
+				} else if(colors==true) {
+					k=k+2;
+					k=k%3;
+				} else if(lose) {
+					t++;
+					t=t%2;
 				}
-				menu=true;
-				return;
+				break;
+			case KeyEvent.VK_DOWN:
+				//snake.direction("DOWN");
+				if (menu==true) {
+					i ++;
+					i=i%3;
+				} else if(colors==true) {
+					k++;
+					k=k%3;
+				} else if (play==true){
+					snake.direction("DOWN");
+				} else if(lose) {
+					t++;
+					t=t%2;
+				}
+				break;
+			case KeyEvent.VK_RIGHT:
+				if(colors==true) {
+					j++;
+					j=j%4;
+				} else if(play==true) {
+					snake.direction("RIGTH");
+				}
+				break;
+			case KeyEvent.VK_LEFT:
+				if(colors==true) {
+					j=j+3;
+					j=j%4;
+				} else if(play==true) {
+					snake.direction("LEFT");
+				}
+				break;
+			case KeyEvent.VK_E:
+				System.exit(0);
+				break;
+			case KeyEvent.VK_SPACE:
+				snake.pause = !snake.pause;
+				break;
+			case KeyEvent.VK_ENTER:
+				//presed2=true;
+				//if (i==1) {
+				if(colors) {
+					switch(j) {
+					case 0:
+						switch(k) {
+						case 0:
+							snake.color=0; // black
+							break;
+						case 1:
+							snake.color=1; //gris
+							break;
+						case 2:
+							snake.color=2; // rosa
+							break;
+						}
+						break;
+					case 1:
+						switch(k) {
+						case 0:
+							snake.color=3;
+							//blau
+							break;
+						case 1:
+							snake.color=4;
+							//verd
+							break;
+						case 2:
+							snake.color=5;
+							//vermell
+							break;
+						}
+						break;
+					case 2:
+						switch(k) {
+						case 0:
+							snake.color=6;
+							//cyan
+							break;
+						case 1:
+							snake.color=7;
+							//magenta
+							break;
+						case 2:
+							snake.color=8;
+							//blanc
+							break;
+						}
+						break;
+					case 3:
+						switch(k) {
+						case 0:
+							snake.color=9;
+							//grisfosc
+							break;
+						case 1:
+							snake.color=10;
+							//tronja
+							break;
+						case 2:
+							snake.color=11;
+							//groc
+							break;
+						}
+						break;
+					}
+					menu=true;
+					i=0;
+					presed2=true;
+					return;
 				} else if(menu==true) {
 					presed=true;
 					menu=false;
+				} else if(lose) {
+					switch(t) {
+					case 0:
+						i=0;
+						presed=true;
+						break;
+					case 1:
+						menu=true;
+						i=0;
+						break;
+					}
+					lose=!lose;
 				}
+		}
 	}
 		
 	@Override
