@@ -1,3 +1,5 @@
+package sad_Snake;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
@@ -16,7 +18,6 @@ public class Snake {
 	public boolean pause = false;
 	public int color=4;
 	// 0 black, 1 gris, 2 rosa, 3 blau, 4 verd, 5 vermell, 6 cyan, 7 magenta, 8 blanc, 9 gris fosc, 10 tronja, 11 groc
-	
 	
 	public Snake() {
 		this.snake.add(new Point(initialX,initialY));
@@ -65,7 +66,7 @@ public class Snake {
 			g.setColor(Color.YELLOW);
 			break;
 		}
-		g.setColor(Color.GREEN);
+		//g.setColor(Color.GREEN);
 		for(int n = 0; n < snake.size(); n++) {
 			g.fillRect(snake.get(n).x, snake.get(n).y, 10, 10);
         }
@@ -83,7 +84,7 @@ public class Snake {
 	}
 	
 	public void moveSnake() {
-		if (!pause) {
+		if(pause == false) {
 			lastPos=snake.get(snake.size()-1);
 			if(allowMove()) {
 				for(int n=snake.size()-1; n>0; n--) {
@@ -100,33 +101,34 @@ public class Snake {
 				newPoint.y=snake.get(0).y+oldY;
 				snake.get(0).setLocation(newPoint);
 			}
+		} else {
+			return;
 		}
-		else {
-			
-		}
-		
 	}
 	
 	public void direction(String d) {
 		oldX=newX;
 		oldY=newY;
 		switch(d) {
-			case "UP":
-				newX = 0;
-				newY=(-10);
-				break;
-			case "DOWN":
-				newX=0;
-				newY=10;
-				break;
-			case "RIGTH":
-				newX=10;
-				newY=0;
-				break;
-			case "LEFT":
-				newX=(-10);
-				newY=0;
-				break;
+		// aqui entra a tots els casos
+		case "UP":
+			newX = 0;
+			//initialX=0;
+			newY=(-10);
+			//snake.get(0).y += 1;
+			break;
+		case "DOWN":
+			newX=0;
+			newY=10;
+			break;
+		case "RIGTH":
+			newX=10;
+			newY=0;
+			break;
+		case "LEFT":
+			newX=(-10);
+			newY=0;
+			break;
 		}
 	}
 	
