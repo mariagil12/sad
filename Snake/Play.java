@@ -1,5 +1,3 @@
-package sad_Snake;
-
 import java.awt.*;
 import java.awt.color.ColorSpace;
 import java.util.ArrayList;
@@ -9,8 +7,11 @@ import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
 
 public class Play extends JFrame implements KeyListener {
-	private int windowWidth = 800;
-	private int windowHeight = 600;
+	public static final int WINDOWWIDTH=800;
+	public static final int WINDOWHEIGHT=600;
+	public static final int MINX=0;
+	public static final int MINY=28;
+	
 	private Snake snake;
 	private Meal meal;
 	private int score;
@@ -19,7 +20,7 @@ public class Play extends JFrame implements KeyListener {
 	private int i=0;
 	private int j=0;
 	private int k=0;
-	private boolean t=true;
+	private boolean t;
 	private boolean presed=false;
 	private boolean presed2=false;
 	private boolean menu=true;
@@ -27,10 +28,7 @@ public class Play extends JFrame implements KeyListener {
 	private boolean play=false;
 	private int time = 10;
 	private boolean first=true;
-	private boolean lose=false;
-			
-	private int minX = 0;
-	private int minY = 28;
+	private boolean lose=true;
 		
 	public static void main (String[] args) {
 		new Play();
@@ -38,7 +36,7 @@ public class Play extends JFrame implements KeyListener {
 	
 	public Play() {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setSize(windowWidth, windowHeight);
+		this.setSize(WINDOWWIDTH, WINDOWHEIGHT);
 		this.setResizable(false);
 		this.setLocation(350,100);
 		this.setVisible(true);
@@ -115,9 +113,9 @@ public class Play extends JFrame implements KeyListener {
 		try {
 			g = bf.getDrawGraphics();			
 			g.setColor(Color.PINK);
-			g.fillRect(minX, minY, windowWidth, windowHeight);
+			g.fillRect(MINX, MINY, WINDOWWIDTH, WINDOWHEIGHT);
 			g.setColor(Color.BLACK);
-			g.drawRect(minX, minY, windowWidth, windowHeight);
+			g.drawRect(MINX, MINY, WINDOWWIDTH, WINDOWHEIGHT);
 			
 			g.setColor(Color.GRAY);
 			g.setFont(new Font("Arial", Font.BOLD, 66));
@@ -214,9 +212,9 @@ public class Play extends JFrame implements KeyListener {
 		try {
 			g = bf.getDrawGraphics();			
 			g.setColor(Color.PINK);
-			g.fillRect(minX, minY, windowWidth, windowHeight);
+			g.fillRect(MINX, MINY, WINDOWWIDTH, WINDOWHEIGHT);
 			g.setColor(Color.BLACK);
-			g.drawRect(minX, minY, windowWidth, windowHeight);
+			g.drawRect(MINX, MINY, WINDOWWIDTH, WINDOWHEIGHT);
 			
 			g.setColor(Color.GRAY);
 			g.setFont(new Font("Arial", Font.BOLD, 66));
@@ -255,9 +253,9 @@ public class Play extends JFrame implements KeyListener {
 			g = bf.getDrawGraphics();
 			
 			g.setColor(Color.LIGHT_GRAY);
-			g.fillRect(minX, minY, windowWidth, windowHeight);
+			g.fillRect(MINX, MINY, WINDOWWIDTH, WINDOWHEIGHT);
 			g.setColor(Color.BLACK);
-			g.drawRect(minX, minY, windowWidth, windowHeight);
+			g.drawRect(MINX, MINY, WINDOWWIDTH, WINDOWHEIGHT);
 			
 			meal.drawFood(g);
 			snake.drawSnake(g,snake.color);
