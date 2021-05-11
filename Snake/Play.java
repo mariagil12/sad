@@ -373,28 +373,28 @@ public class Play extends JFrame implements KeyListener {
 					case 0:
 						switch(k) {
 						case 0:
-							snake.color=0; // black
+							snake.color=Snake.BLACK; // black
 							break;
 						case 1:
-							snake.color=1; //gris
+							snake.color=Snake.GRAY; //gris
 							break;
 						case 2:
-							snake.color=2; // rosa
+							snake.color=Snake.PINK; // rosa
 							break;
 						}
 						break;
 					case 1:
 						switch(k) {
 						case 0:
-							snake.color=3;
+							snake.color=Snake.BLUE;
 							//blau
 							break;
 						case 1:
-							snake.color=4;
+							snake.color=Snake.GREEN;
 							//verd
 							break;
 						case 2:
-							snake.color=5;
+							snake.color=Snake.RED;
 							//vermell
 							break;
 						}
@@ -402,15 +402,15 @@ public class Play extends JFrame implements KeyListener {
 					case 2:
 						switch(k) {
 						case 0:
-							snake.color=6;
+							snake.color=Snake.CYAN;
 							//cyan
 							break;
 						case 1:
-							snake.color=7;
+							snake.color=Snake.MAGENTA;
 							//magenta
 							break;
 						case 2:
-							snake.color=8;
+							snake.color=Snake.WHITE;
 							//blanc
 							break;
 						}
@@ -418,15 +418,15 @@ public class Play extends JFrame implements KeyListener {
 					case 3:
 						switch(k) {
 						case 0:
-							snake.color=9;
+							snake.color=Snake.DARKGRAY;
 							//grisfosc
 							break;
 						case 1:
-							snake.color=10;
+							snake.color=Snake.ORANGE;
 							//tronja
 							break;
 						case 2:
-							snake.color=11;
+							snake.color=Snake.YELLOW;
 							//groc
 							break;
 						}
