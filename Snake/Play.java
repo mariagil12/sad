@@ -1,3 +1,5 @@
+package sad_Snake;
+
 import java.awt.*;
 import java.awt.color.ColorSpace;
 import java.util.ArrayList;
@@ -11,6 +13,7 @@ public class Play extends JFrame implements KeyListener {
 	public static final int WINDOWHEIGHT=600;
 	public static final int MINX=0;
 	public static final int MINY=28;
+	public static final int TIME=10;
 	
 	private Snake snake;
 	private Meal meal;
@@ -20,15 +23,15 @@ public class Play extends JFrame implements KeyListener {
 	private int i=0;
 	private int j=0;
 	private int k=0;
-	private boolean t;
-	private boolean presed=false;
-	private boolean presed2=false;
+	private boolean t=true;
+	private boolean pressedMenu=false;
+	private boolean pressedColor=false;
+	private boolean pressedLose=false;
 	private boolean menu=true;
 	private boolean colors=false;
 	private boolean play=false;
-	private int time = 10;
 	private boolean first=true;
-	private boolean lose=true;
+	private boolean lose=false;
 		
 	public static void main (String[] args) {
 		new Play();
@@ -45,57 +48,67 @@ public class Play extends JFrame implements KeyListener {
 		this.addKeyListener(this);
 		
 		while(true) {
-			if (first) {
-				initializeObjects();
-				first=!first;
-			}
-			
-			while(menu) {
-				showMenu(i);
-				sleepMenu();
-				if (presed) {
-					menu=false;
-				}
-				presed=false;
-			}
-			switch(i) {
-			case 0:
-				play=true;
-				playSnake();
-				System.out.println(t);
-				System.out.println(lose);
-				System.out.println('A');
-				play=false;
-				break;
-			case 1:
-				colors=true;
-				while(colors) {
-					if(presed2) {
-						colors=false;
-						break;
-					}
-					presed2=false;
-					showColors(j,k);
-					sleepMenu();
-				}
-				colors=false;
-				showMenu(i);
-				break;
-			case 2:
-				System.exit(0);
-				break;
-			}
+			game();
 		}
 	}
 	
-	private void playSnake() {	
-		while(true) {
+	private void game() {
+		if (first) {
+			initializeObjects(Snake.GREEN);
+			first=!first;
+		}
+		
+		while(menu) {
+			showMenu(i);
+			sleepMenu();
+			if (pressedMenu) {
+				menu=false;
+			}
+			pressedMenu=false;
+		}
+		switch(i) {
+		case 0:
+			play=true;
+			playSnake();
+			play=false;
+			break;
+		case 1:
+			colors=true;
+			while(colors) {
+				showColors(j,k);
+				sleepMenu();
+				if(pressedColor) { 
+					colors=false;
+					break;
+				}
+				pressedColor=false;	
+			}
+			colors=false;
+			break;
+		case 2:
+			System.exit(0);
+			break;
+		}
+	}
+	
+	private void playSnake() {
+		initializeObjects(snake.color);
+		while(!lose) {
 			play();
 			sleep();
 		}
+		while(lose) {
+			showLose(t);
+			sleepMenu();
+			if(pressedLose) {
+				lose=false;
+			}
+			pressedLose=false;
+		}
 	}
-	private void initializeObjects() {
-		snake = new Snake();
+	
+	private void initializeObjects(int c) {
+		snake = new Snake(c);
 		meal = new Meal();
 		meal.newFood();
 		score = 0;
@@ -267,6 +280,41 @@ public class Play extends JFrame implements KeyListener {
 		Toolkit.getDefaultToolkit().sync();
 	}
 	
+	private void showLose(boolean t) {
+		BufferStrategy bf = this.getBufferStrategy();
+		Graphics g = null;
+		try {
+			g = bf.getDrawGraphics();
+			
+			g.setColor(Color.PINK);
+			g.fillRect(MINX, MINY, WINDOWWIDTH, WINDOWHEIGHT);
+			g.setColor(Color.BLACK);
+			g.drawRect(MINX, MINY, WINDOWWIDTH, WINDOWHEIGHT);
+			
+			g.setColor(Color.RED);
+			g.setFont(new Font("Arial", Font.BOLD, 86));
+			g.drawString("YOU LOSE :(", 150, 250);
+			g.setColor(Color.BLACK);
+			g.setFont(new Font("Arial", Font.BOLD, 56));
+			g.drawString("Score: " + score, 300, 150);
+			g.setFont(new Font("Arial", Font.BOLD, 36));
+			g.drawString("Options:", 125, 350);
+			g.drawString("PLAY AGAIN", 125, 400);
+			g.drawString("BACK TO MENU", 125, 450);
+			if(t) {
+				g.setColor(Color.RED);
+				g.fillOval(100, 380, 15, 15);
+			} else {
+				g.setColor(Color.RED);
+				g.fillOval(100, 430, 15, 15);
+			}
+		} finally {
+			g.dispose();
+		}
+		bf.show();
+		Toolkit.getDefaultToolkit().sync();
+	}
+	
 	private void checkCollition() {	
 		if ((snake.getSnake().get(0).x >= (meal.getFood().x-9) && snake.getSnake().get(0).x <= (meal.getFood().x+9)) && (snake.getSnake().get(0).y >= (meal.getFood().y-9) && snake.getSnake().get(0).y <= (meal.getFood().y+9))) {
 			snake.grow();
@@ -274,11 +322,11 @@ public class Play extends JFrame implements KeyListener {
 			score += 10;
 		}
 		if (snake.getSnake().get(0).x<7 || snake.getSnake().get(0).y<26 || snake.getSnake().get(0).x>795 || snake.getSnake().get(0).y>591) {
-			initializeObjects();
+			lose=true;
 		}
 		for (int n=1; n<snake.getSnake().size(); n++) {
 			if(snake.getSnake().get(0).equals(snake.getSnake().get(n)) && snake.getSnake().size()>4) {
-				initializeObjects();
+				lose=true;
 			}
 		}
 	}
@@ -312,7 +360,7 @@ public class Play extends JFrame implements KeyListener {
 	}
 	
 	private void sleepMenu() {
-		goal = (System.currentTimeMillis()+time);
+		goal = (System.currentTimeMillis()+TIME);
 		while (System.currentTimeMillis()<goal) {
 			
 		}
@@ -332,18 +380,23 @@ public class Play extends JFrame implements KeyListener {
 					k=k+2;
 					k=k%3;
 				}
+				if(lose) {
+					t=!t;
+				}
 				break;
 			case KeyEvent.VK_DOWN:
-				//snake.direction("DOWN");
 				if (menu) {
 					i ++;
 					i=i%3;
 				} else if(colors) {
 					k++;
 					k=k%3;
-				} else if (play==true){
+				} else if (play){
 					snake.direction("DOWN");
-				} 
+				}
+				if(lose) {
+					t=!t;
+				}
 				break;
 			case KeyEvent.VK_RIGHT:
 				if(colors) {
@@ -373,71 +426,73 @@ public class Play extends JFrame implements KeyListener {
 					case 0:
 						switch(k) {
 						case 0:
-							snake.color=Snake.BLACK; // black
+							snake.color=snake.BLACK; 
 							break;
 						case 1:
-							snake.color=Snake.GRAY; //gris
+							snake.color=snake.GRAY; 
 							break;
 						case 2:
-							snake.color=Snake.PINK; // rosa
+							snake.color=snake.PINK; 
 							break;
 						}
 						break;
 					case 1:
 						switch(k) {
 						case 0:
-							snake.color=Snake.BLUE;
-							//blau
+							snake.color=snake.BLUE;
 							break;
 						case 1:
-							snake.color=Snake.GREEN;
-							//verd
+							snake.color=snake.GREEN;
 							break;
 						case 2:
-							snake.color=Snake.RED;
-							//vermell
+							snake.color=snake.RED;
 							break;
 						}
 						break;
 					case 2:
 						switch(k) {
 						case 0:
-							snake.color=Snake.CYAN;
-							//cyan
+							snake.color=snake.CYAN;
 							break;
 						case 1:
-							snake.color=Snake.MAGENTA;
-							//magenta
+							snake.color=snake.MAGENTA;
 							break;
 						case 2:
-							snake.color=Snake.WHITE;
-							//blanc
+							snake.color=snake.WHITE;
 							break;
 						}
 						break;
 					case 3:
 						switch(k) {
 						case 0:
-							snake.color=Snake.DARKGRAY;
-							//grisfosc
+							snake.color=snake.DARKGRAY;
 							break;
 						case 1:
-							snake.color=Snake.ORANGE;
-							//tronja
+							snake.color=snake.ORANGE;
 							break;
 						case 2:
-							snake.color=Snake.YELLOW;
-							//groc
+							snake.color=snake.YELLOW;
 							break;
 						}
 						break;
 					}
 					menu=true;
 					i=0;
-					presed2=true;
+					pressedColor=true;	
 					return;
 				} else if(menu) {
-					presed=true;
+					pressedMenu=true;
+				} else if(lose) {
+					pressedLose=true;
+					if(t) {
+						i=0;
+						play=true;
+						menu=false;
+					} else {
+						menu=true;
+						i=0;
+					}
+					t=true;
 				}
 		}
 	}
