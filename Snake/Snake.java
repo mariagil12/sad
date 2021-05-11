@@ -1,3 +1,5 @@
+package sad_Snake;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
@@ -27,10 +29,11 @@ public class Snake {
 	private Point lastPos;
 	private Point aux = new Point();
 	public boolean pause = false;
-	public int color=GREEN;
+	public int color;
 	
-	public Snake() {
+	public Snake(int c) {
 		this.snake.add(new Point(INITIALX,INITIALY));
+		this.color=c;
 	}
 	
 	public ArrayList<Point> getSnake() {
@@ -76,7 +79,6 @@ public class Snake {
 			g.setColor(Color.YELLOW);
 			break;
 		}
-		//g.setColor(Color.GREEN);
 		for(int n = 0; n < snake.size(); n++) {
 			g.fillRect(snake.get(n).x, snake.get(n).y, 10, 10);
         }
@@ -120,12 +122,9 @@ public class Snake {
 		oldX=newX;
 		oldY=newY;
 		switch(d) {
-		// aqui entra a tots els casos
 		case "UP":
 			newX = 0;
-			//initialX=0;
 			newY=(-10);
-			//snake.get(0).y += 1;
 			break;
 		case "DOWN":
 			newX=0;
