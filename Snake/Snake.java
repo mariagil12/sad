@@ -1,14 +1,25 @@
-package sad_Snake;
-
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.util.ArrayList;
 
 public class Snake {
+	public static final int BLACK=0;
+	public static final int GRAY=1;
+	public static final int PINK=2;
+	public static final int BLUE=3;
+	public static final int GREEN=4;
+	public static final int RED=5;
+	public static final int CYAN=6;
+	public static final int MAGENTA=7;
+	public static final int WHITE=8;
+	public static final int DARKGRAY=9;
+	public static final int ORANGE=10;
+	public static final int YELLOW=11;
+	public static final int INITIALX=400;
+	public static final int INITIALY=300;
+	
 	private ArrayList<Point> snake = new ArrayList<Point>();
-	private int initialX = 400;
-	private int initialY = 300;
 	private int newX;
 	private int newY;
 	private int oldX;
@@ -16,11 +27,10 @@ public class Snake {
 	private Point lastPos;
 	private Point aux = new Point();
 	public boolean pause = false;
-	public int color=4;
-	// 0 black, 1 gris, 2 rosa, 3 blau, 4 verd, 5 vermell, 6 cyan, 7 magenta, 8 blanc, 9 gris fosc, 10 tronja, 11 groc
+	public int color=GREEN;
 	
 	public Snake() {
-		this.snake.add(new Point(initialX,initialY));
+		this.snake.add(new Point(INITIALX,INITIALY));
 	}
 	
 	public ArrayList<Point> getSnake() {
@@ -29,40 +39,40 @@ public class Snake {
 	
 	public void drawSnake(Graphics g, int color) {
 		switch(color) {
-		case 0:
+		case BLACK:
 			g.setColor(Color.BLACK);
 			break;
-		case 1:
+		case GRAY:
 			g.setColor(Color.GRAY);
 			break;
-		case 2:
+		case PINK:
 			g.setColor(Color.PINK);
 			break;
-		case 3:
+		case BLUE:
 			g.setColor(Color.BLUE);
 			break;
-		case 4:
+		case GREEN:
 			g.setColor(Color.GREEN);
 			break;
-		case 5:
+		case RED:
 			g.setColor(Color.RED);
 			break;
-		case 6:
+		case CYAN:
 			g.setColor(Color.CYAN);
 			break;
-		case 7:
+		case MAGENTA:
 			g.setColor(Color.MAGENTA);
 			break;
-		case 8:
+		case WHITE:
 			g.setColor(Color.WHITE);
 			break;
-		case 9:
+		case DARKGRAY:
 			g.setColor(Color.DARK_GRAY);
 			break;
-		case 10:
+		case ORANGE:
 			g.setColor(Color.ORANGE);
 			break;
-		case 11:
+		case YELLOW:
 			g.setColor(Color.YELLOW);
 			break;
 		}
