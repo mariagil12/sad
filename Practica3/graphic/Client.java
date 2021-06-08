@@ -13,6 +13,11 @@ import java.util.Set;
 
 public class Client {
 
+	public static volatile boolean success = false;
+	public static volatile boolean contacts = false;
+	private static volatile String name = "name";
+	private static Selector selector;
+	private static SocketChannel socketChannel;
 	private static ByteBuffer buffer = ByteBuffer.allocate(1024);
 	private final static InetSocketAddress address = new InetSocketAddress("127.0.0.1", 1234);
 
@@ -28,12 +33,6 @@ public class Client {
 		buffer.flip();
 		channel.write(buffer);
 	}
-
-	public static volatile boolean success = false;
-	public static volatile boolean contacts = false;
-	private static volatile String name = "name";
-	private static Selector selector;
-	private static SocketChannel socketChannel;
 
 	public static class MessageThread extends Thread{
 		private JTextArea target;
@@ -91,19 +90,23 @@ public class Client {
 			}
 		}
 	}
+	
 	public static void start() throws IOException{
 		socketChannel = SocketChannel.open(address);
 		selector = Selector.open();
 		socketChannel.configureBlocking(false);
 		socketChannel.register(selector, SelectionKey.OP_READ);
 	}
+	
 	public static void setName(String name) throws IOException {
 		Client.name = name;
 		write(socketChannel, name);
 	}
+	
 	public static void sendMsg(String msg) throws IOException {
 		write(socketChannel, name + "###" + msg);
 	}
+	
 	public static void main(String[] args)  {
 
 	}
