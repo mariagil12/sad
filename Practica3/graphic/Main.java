@@ -6,10 +6,10 @@ import java.awt.event.ActionListener;
 
 public class Main {
 
-	public static void main(String[] args) throws InterruptedException {
+public static void main(String[] args) throws InterruptedException {
 		
 		//Main Container
-      		JFrame frame = new JFrame("SAD GraphicChat");
+        JFrame frame = new JFrame("SAD GraphicChat");
 		frame.setSize(600, 450);
 		frame.setLocation(600, 450);
 		frame.setContentPane(new JPanel());
