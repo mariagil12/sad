@@ -1,3 +1,5 @@
+package sad_practica3;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
@@ -84,9 +86,9 @@ public class Server {
 		}
     }
 	
-	
-    //Returns all the names of the clients
-     
+	 /**
+     * Returns all the names of the clients
+     */
     String getUserNames() {
         String userNames = "";
         for (String key : this.names.keySet()) {
@@ -95,9 +97,9 @@ public class Server {
         return userNames;
 	}
 	
-     
-     //Returns true if there are other users connected 
-     
+     /**
+     * Returns true if there are other users connected 
+     */
     boolean hasUsers() {
         return !this.names.isEmpty();
     }
